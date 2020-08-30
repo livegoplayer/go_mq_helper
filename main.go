@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/livegoplayer/go_mq_helper/rabbitmq"
 )
 
 func main() {
@@ -22,9 +24,9 @@ func testPublishMessage() {
 		panic(err)
 	}
 	//初始化，一般放在main中
-	InitMqChannel("amqp://guest:guest@127.0.0.1:5670/")
+	rabbitmq.InitMqChannel("amqp://guest:guest@127.0.0.1:5670/")
 
-	Publish(&Message{
+	rabbitmq.Publish(&rabbitmq.Message{
 		Message:    msg,
 		RetryTimes: 1,
 		Exchange:   "log",
@@ -34,9 +36,9 @@ func testPublishMessage() {
 
 func testConsumeMessage() {
 	//初始化，一般放在main中
-	InitMqChannel("amqp://guest:guest@127.0.0.1:5670/")
+	rabbitmq.InitMqChannel("amqp://guest:guest@127.0.0.1:5670/")
 
-	StartConsumer("log.go_user", "testlog", callback)
+	rabbitmq.StartConsumer("log.go_user", "testlog", callback)
 }
 
 func callback(msg []byte) bool {
