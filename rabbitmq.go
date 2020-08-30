@@ -124,12 +124,11 @@ func StartConsumer(queueName, consumeName string, callback ConsumerCallBackFunc)
 }
 
 //处理消息
-func AddConsumer(queueName, consumeName string, callback ConsumerCallBackFunc) *amqp.Channel {
-	channel := GetNewChannel()
+func AddConsumer(queueName, consumeName string, callback ConsumerCallBackFunc, channel *amqp.Channel) error {
 
 	msgs, err := channel.Consume(queueName, consumeName, true, false, false, false, nil)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	for msg := range msgs {
@@ -141,8 +140,7 @@ func AddConsumer(queueName, consumeName string, callback ConsumerCallBackFunc) *
 			Publish(message)
 		}
 	}
-
-	return channel
+	return nil
 }
 
 func wrapMessage(realContext []byte, retryTimes int, Exchange string, routingKey string) []byte {
