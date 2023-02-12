@@ -1,10 +1,5 @@
 module github.com/livegoplayer/go_mq_helper
 
-go 1.14
+go 1.20
 
-require (
-	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
-	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
-	github.com/streadway/amqp v1.0.0
-	github.com/tebeka/strftime v0.1.5 // indirect
-)
+require github.com/streadway/amqp v1.0.0

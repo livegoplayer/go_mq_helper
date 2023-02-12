@@ -20,7 +20,7 @@ var (
 	done           chan bool
 )
 
-//初始化channel
+// InitMqChannel 初始化channel
 func InitMqChannel(url string) bool {
 	var err error
 	amqpConnection, err = amqp.Dial(url)
@@ -40,7 +40,7 @@ func InitMqChannel(url string) bool {
 	return true
 }
 
-//获取channel
+// GetSingleChannel 获取channel
 func GetSingleChannel() *amqp.Channel {
 	if amqpChannel != nil && !amqpConnection.IsClosed() {
 		return amqpChannel
@@ -59,7 +59,7 @@ func GetSingleChannel() *amqp.Channel {
 	return amqpChannel
 }
 
-//获取channel
+// GetNewChannel 获取channel
 func GetNewChannel() *amqp.Channel {
 	if amqpConnection == nil || amqpConnection.IsClosed() {
 		panic("队列参数尚未初始化")
@@ -73,7 +73,7 @@ func GetNewChannel() *amqp.Channel {
 	return channel
 }
 
-//发布消息
+// Publish 发布消息
 func Publish(message *Message) {
 	channel := GetSingleChannel()
 
@@ -92,7 +92,7 @@ func Publish(message *Message) {
 
 type ConsumerCallBackFunc func(msg []byte) bool
 
-//处理消息,单个consumer使用go 协程，可以做简单的例子用
+// StartConsumer 处理消息,单个consumer使用go 协程，可以做简单的例子用
 func StartConsumer(queueName, consumeName string, callback ConsumerCallBackFunc) {
 	channel := GetNewChannel()
 
@@ -123,7 +123,7 @@ func StartConsumer(queueName, consumeName string, callback ConsumerCallBackFunc)
 	}
 }
 
-//处理消息
+// AddConsumer 处理消息
 func AddConsumer(queueName, consumeName string, callback ConsumerCallBackFunc, channel *amqp.Channel) error {
 
 	msgs, err := channel.Consume(queueName, consumeName, true, false, false, false, nil)
